@@ -1,0 +1,88 @@
+# Redis configuration
+redis:
+  address: 'redis:6379'
+
+# Identity Server configuration
+is:
+  # If using CockroachDB
+  database-uri: 'postgres://root@cockroach:26257/ttn_lorawan?sslmode=disable'
+
+  # If using PostgreSQL:
+  # database-uri: 'postgres://root@postgres:5432/ttn_lorawan?sslmode=disable'
+
+  # Email configuration for "lora01.ntslab.loc"
+  email:
+    sender-name: 'The Things Stack'
+    sender-address: 'noreply@lora01.ntslab.loc'
+    network:
+      name: 'The Things Stack'
+      console-url: 'https://lora01.ntslab.loc/console'
+      identity-server-url: 'https://lora01.ntslab.loc/oauth'
+
+  # Web UI configuration for "lora01.ntslab.loc":
+  oauth:
+    ui:
+      canonical-url: 'https://lora01.ntslab.loc/oauth'
+      is:
+        base-url: 'https://lora01.ntslab.loc/api/v3'
+
+# HTTP server configuration
+https:
+  cookie:
+    # generate 32 bytes (openssl rand -hex 32)
+    block-key: 'bf81c5be3111db5f6ea56c464e4b473e93b45b4fc41b5a722dc226b36a2d6dda'
+    # generate 64 bytes (openssl rand -hex 64)
+    hash-key: '7c8e9e3dc723ba71824feb5e437ef1711ad6e61b00ff72379a2a6f1d9486614388e837374e0a5e61d5cb704e4753532442afd3df12f71875d6f6433be8bbb10e'
+  metrics:
+    password: 'Rfc1918'               # choose a password
+  pprof:
+    password: 'Rfc1918'                 # choose a password
+
+tls:
+  source: file
+  root-ca: /run/secrets/ca.pem
+  certificate: /run/secrets/cert.pem
+  key: /run/secrets/key.pem
+
+# If Gateway Server enabled, defaults for "lora01.ntslab.loc":
+gs:
+  mqtt:
+    public-address: 'lora01.ntslab.loc:1882'
+    public-tls-address: 'lora01.ntslab.loc:8882'
+  mqtt-v2:
+    public-address: 'lora01.ntslab.loc:1881'
+    public-tls-address: 'lora01.ntslab.loc:8881'
+
+# If Gateway Configuration Server enabled, defaults for "lora01.ntslab.loc":
+gcs:
+  basic-station:
+    default:
+      lns-uri: 'wss://lora01.ntslab.loc:8887'
+  the-things-gateway:
+    default:
+      mqtt-server: 'mqtts://lora01.ntslab.loc:8881'
+
+# Web UI configuration for "lora01.ntslab.loc":
+console:
+  ui:
+    canonical-url: 'https://lora01.ntslab.loc/console'
+    is:
+      base-url: 'https://lora01.ntslab.loc/api/v3'
+    gs:
+      base-url: 'https://lora01.ntslab.loc/api/v3'
+    ns:
+      base-url: 'https://lora01.ntslab.loc/api/v3'
+    as:
+      base-url: 'https://lora01.ntslab.loc/api/v3'
+    js:
+      base-url: 'https://lora01.ntslab.loc/api/v3'
+    qrg:
+      base-url: 'https://lora01.ntslab.loc/api/v3'
+    edtc:
+      base-url: 'https://lora01.ntslab.loc/api/v3'
+
+  oauth:
+    authorize-url: 'https://lora01.ntslab.loc/oauth/authorize'
+    token-url: 'https://lora01.ntslab.loc/oauth/token'
+    client-id: 'console'
+    client-secret: 'SM2CE7335KDAIILCA76KETRHDQTTDAQTDJHBSL6RCOX3WFZFDZ4Q'          # choose or generate a secret (*)

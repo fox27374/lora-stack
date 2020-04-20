@@ -34,9 +34,9 @@ https:
     # generate 64 bytes (openssl rand -hex 64)
     hash-key: '7c8e9e3dc723ba71824feb5e437ef1711ad6e61b00ff72379a2a6f1d9486614388e837374e0a5e61d5cb704e4753532442afd3df12f71875d6f6433be8bbb10e'
   metrics:
-    password: 'Rfc1918'               # choose a password
+    password: 'testpassword'               # choose a password
   pprof:
-    password: 'Rfc1918'                 # choose a password
+    password: 'testpassword'                 # choose a password
 
 tls:
   source: file

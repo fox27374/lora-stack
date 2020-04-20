@@ -1,0 +1,67 @@
+version: '3.7'
+services:
+  
+  cockroach:
+    image: cockroachdb/cockroach
+    command: start-single-node --http-port 26256 --insecure --listen-addr=0.0.0.0
+    restart: unless-stopped
+    volumes:
+      - "./data/cockroach:/cockroach/cockroach-data"
+    ports:
+      - "127.0.0.1:26257:26257" # Cockroach
+      - "127.0.0.1:26256:26256" # WebUI
+
+  redis:
+    image: redis
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    volumes:
+      - "./data/redis:/data"
+    ports:
+      - "127.0.0.1:6379:6379"
+
+  stack:
+    image: thethingsnetwork/lorawan-stack:latest
+    entrypoint: ttn-lw-stack -c /config/ttn-lw-stack.yml
+    command: start
+    restart: unless-stopped
+    depends_on:
+      - redis
+      - cockroach
+    volumes:
+      - "./data/blob:/srv/ttn-lorawan/public/blob"
+      - "./config/stack:/config:ro"
+      - "./config/stack/cert:/var/lib/self-signed/"
+    environment:
+      TTN_LW_BLOB_LOCAL_DIRECTORY: /srv/ttn-lorawan/public/blob
+      #TTN_LW_REDIS_ADDRESS: redis:6379
+      #TTN_LW_IS_DATABASE_URI: postgres://root@cockroach:26257/ttn_lorawan?sslmode=disable
+      TTN_LW_LOG_LEVEL: debug
+
+
+    ports:
+      - "80:1885"
+      - "443:8885"
+      - "1881:1881"
+      - "8881:8881"
+      - "1882:1882"
+      - "8882:8882"
+      - "1883:1883"
+      - "8883:8883"
+      - "1884:1884"
+      - "8884:8884"
+      - "1885:1885"
+      - "8885:8885"
+      - "1887:1887"
+      - "8887:8887"
+      - "1700:1700/udp"
+
+    secrets:
+      - cert.pem
+      - key.pem
+
+secrets:
+  cert.pem:
+    file: config/stack/cert/cert.pem
+  key.pem:
+    file: config/stack/cert/key.pem

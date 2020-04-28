@@ -1,3 +1,6 @@
+log:
+  level: "debug"
+
 # Redis configuration
 redis:
   address: 'redis:6379'
@@ -6,9 +9,6 @@ redis:
 is:
   # If using CockroachDB
   database-uri: 'postgres://root@cockroach:26257/ttn_lorawan?sslmode=disable'
-
-  # If using PostgreSQL:
-  # database-uri: 'postgres://root@postgres:5432/ttn_lorawan?sslmode=disable'
 
   # Email configuration for "lora01.ntslab.loc"
   email:
@@ -34,15 +34,15 @@ https:
     # generate 64 bytes (openssl rand -hex 64)
     hash-key: '7c8e9e3dc723ba71824feb5e437ef1711ad6e61b00ff72379a2a6f1d9486614388e837374e0a5e61d5cb704e4753532442afd3df12f71875d6f6433be8bbb10e'
   metrics:
-    password: 'testpassword'               # choose a password
+    password: 'metrics'               # choose a password
   pprof:
-    password: 'testpassword'                 # choose a password
+    password: 'pprof'                 # choose a password
 
 tls:
-  source: file
-  root-ca: /run/secrets/ca.pem
-  certificate: /run/secrets/cert.pem
-  key: /run/secrets/key.pem
+  source: "file"
+  root-ca: "/var/run/secrets/ca.pem"
+  certificate: "/var/run/secrets/cert.pem"
+  key: "/var/run/secrets/key.pem"
 
 # If Gateway Server enabled, defaults for "lora01.ntslab.loc":
 gs:
@@ -61,6 +61,10 @@ gcs:
   the-things-gateway:
     default:
       mqtt-server: 'mqtts://lora01.ntslab.loc:8881'
+
+blob:
+  local:
+    directory: "/srv/ttn-lorawan/public/blob"
 
 # Web UI configuration for "lora01.ntslab.loc":
 console:
